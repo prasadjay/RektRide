@@ -17,10 +17,10 @@ public class Logger : MonoBehaviour {
 	
 	}
 
-	public static string WriteLog(string Message, string originClass){
+	public static string WriteLog(string Message){
 		DateTime now = DateTime.Now;
-		string LogMessage = "[ " + now + " ] @ " + originClass + " : " + Message;
-		string ScreenMessage = originClass + " : " + Message;
+		string LogMessage = "[ " + now + " ] : " + Message;
+		string ScreenMessage = Message;
 
         //write to file
         string logFileName = Application.persistentDataPath + "/RektRideEventLog.txt";
