@@ -41,7 +41,7 @@ public class PerformanceMonitor : MonoBehaviour {
 
 
 		deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
-		float msec = deltaTime * 1000.0f;
+		//float msec = deltaTime * 1000.0f;
 		float fps = 1.0f / deltaTime;
         Performance_Counter_TextLabel.text = ((int)fps).ToString() + " FPS \n" + Screen.width.ToString() + " x " + Screen.height.ToString() + "\n" + ((int)touchDeltaPosition.x).ToString() + "\n" + ((int)touchDeltaPosition.y).ToString() + "\n"+ touchside;
 

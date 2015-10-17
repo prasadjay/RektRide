@@ -4,7 +4,6 @@ using System.IO;
 using System;
 
 public class Logger : MonoBehaviour {
-	private static bool isLoggerEnabled= true;
 	private static ArrayList screenLogs = new ArrayList ();
 	private static int MaxScreenLogEntries= 15;
 
@@ -17,13 +16,13 @@ public class Logger : MonoBehaviour {
 	
 	}
 
-	public static string WriteLog(string Message){
+	public static string Log(string Message){
 		DateTime now = DateTime.Now;
 		string LogMessage = "[ " + now + " ] : " + Message;
 		string ScreenMessage = Message;
 
         //write to file
-        string logFileName = Application.persistentDataPath + "/RektRideEventLog.txt";
+        string logFileName = Application.persistentDataPath + "/EventLog.txt";
  
          try
          {

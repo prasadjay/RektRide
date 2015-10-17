@@ -8,149 +8,47 @@ public class GraphicSettings : MonoBehaviour
 {
 
     //THIS FILE INITIALIZES RESOLUTION DATA AND SAVES TO DISK/MEMORY
-
-
-    private bool isSupported = true;
-    private int xResolution = 0;
-    private int yResolution = 0;
-
-    //Loading Splashes
-    public GameObject splash_720;
-    public GameObject splash_1080;
-    public GameObject error_text;
-
-    //Loading LogViews
-    public Text logView;
-
     // Use this for initialization
     void Awake()
     {
-        logView.text = Logger.WriteLog("New Game Instance!");
-        //check for settings file
-        if (File.Exists(Application.persistentDataPath + "/settings.xml"))
-        {
-            //File Exists... Read settings from file
-            XmlReader reader = XmlReader.Create(Application.persistentDataPath + "/settings.xml");
-            while (reader.Read())
-            {
-                if (reader.Name == "Resolution")
-                {
-                    while (reader.NodeType != XmlNodeType.EndElement)
-                    {
-                        reader.Read();
-                        if (reader.Name == "width")
-                        {
-                            while (reader.NodeType != XmlNodeType.EndElement)
-                            {
-                                reader.Read();
-                                if (reader.NodeType == XmlNodeType.Text)
-                                {
-                                    xResolution = System.Int32.Parse(reader.Value);
-                                }
-                            }
-                            reader.Read();
-                        } //end if
 
-                        if (reader.Name == "height")
-                        {
-                            while (reader.NodeType != XmlNodeType.EndElement)
-                            {
-                                reader.Read();
-                                if (reader.NodeType == XmlNodeType.Text)
-                                {
-                                    yResolution = System.Int32.Parse(reader.Value);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else
+        Debug.Log(Logger.Log("Loading scene : " + Application.loadedLevelName));
+
+        //Check for in memory settings
+
+        if (settings.Resolution.x == 0 || settings.Resolution.y == 0)
         {
-            if (Screen.width >= 1080 && Screen.height >= 1920)
+            Debug.Log(Logger.Log("New Game Instance....."));
+            //check for file
+            Vector2 valuesFromSettingsXML = XMLManager.readResolutionFromXML();
+
+            if (valuesFromSettingsXML.x == 0 || valuesFromSettingsXML.y == 0)
             {
-                //1080p or more screen detected
-                //deactivated since 720p mode is default test mode
-                //xResolution = 1080;
-                //yResolution = 1920;
-                //isSupported = true;
-                xResolution = 720;
-                yResolution = 1280;
-                isSupported = true;
-            }
-            else if (Screen.width >= 720 && Screen.height >= 1280)
-            {
-                //720p or more display detected
-                xResolution = 720;
-                yResolution = 1280;
-                isSupported = true;
+                //File Missing.. Just Use Default Resolution... No changes...
+                Debug.Log(Logger.Log("Using Default Resolution"));
             }
             else
             {
-                //currently unsupported resolution
-                xResolution = 0;
-                yResolution = 0;
-                isSupported = false;
+                Debug.Log(Logger.Log("Using XML Resolution Data"));
+                Screen.SetResolution((int)valuesFromSettingsXML.x, (int)valuesFromSettingsXML.y, Screen.fullScreen);
             }
 
-            //write to disk
-            writeResolutionToXML(xResolution.ToString(), yResolution.ToString());
+            //write to memory
+            settings.Resolution = valuesFromSettingsXML;
 
         }
-
-        if (isSupported) {
-            Screen.SetResolution(xResolution, yResolution, Screen.fullScreen);
-        }
-
-        //write to memory
-        Vector2 resolution = new Vector2(xResolution, yResolution);
-        settings.Resolution = resolution;
-        //Activate Splash and other layers
-        string resMessage = "Resolution : " + xResolution.ToString() + " * " + yResolution ;
-        Debug.Log(resMessage);
-        Activate(resolution);
-
-    }
-
-    private void writeResolutionToXML(string width, string height)
-    {
-        XmlWriterSettings settings = new XmlWriterSettings();
-        settings.Indent = true;
-
-        XmlWriter writer = XmlWriter.Create((Application.persistentDataPath + "/settings.xml"), settings);
-        writer.WriteStartDocument();
-        writer.WriteComment("Automatically Generated by Rekt Ride Application...");
-        writer.WriteStartElement("Resolution");
-        writer.WriteElementString("width", width);
-        writer.WriteElementString("height", height);
-        writer.WriteEndElement();
-        writer.WriteEndDocument();
-
-        writer.Flush();
-        writer.Close();
-    }
-
-    private void Activate(Vector2 resolution) {
-        if (resolution.x == 720) {
-            splash_720.SetActive(true);
-            splash_1080.SetActive(false);
-            error_text.SetActive(false);
-            logView.fontSize = 25;
-            logView.rectTransform.TransformPoint(290.7f, -259f, 0f);
-            logView.text = Logger.WriteLog("Resolution : 720p");
-        }
-        else if (resolution.x == 1080)
+        else
         {
-            splash_720.SetActive(false);
-            splash_1080.SetActive(true);
-            error_text.SetActive(false);
+            //Already in memory
+            Screen.SetResolution((int)settings.Resolution.x, (int)settings.Resolution.y, Screen.fullScreen);
+            Debug.Log(Logger.Log("Using In-Memory Resolution"));
         }
-        else {
-            splash_720.SetActive(false);
-            splash_1080.SetActive(false);
-            error_text.SetActive(true);
-        }
+
+        Debug.Log(Logger.Log("Running Resolution : " + Screen.width.ToString() + "x" + Screen.height.ToString()));
+
+
     }
+
+   
 
 }
