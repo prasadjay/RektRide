@@ -52,9 +52,9 @@
      <Compile Include="Assets\GlobalScripts\TouchGesture.cs" />
      <Compile Include="Assets\GlobalScripts\XMLManager.cs" />
      <Compile Include="Assets\GlobalScripts\settings.cs" />
-     <Compile Include="Assets\scenes\GameName\GameNameLinker.cs" />
      <Compile Include="Assets\scenes\MainMenu\MainMenuLinker.cs" />
      <Compile Include="Assets\scenes\splash\splashLinker.cs" />
+     <Compile Include="Assets\scenes\testlevel\testBehaviour.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
